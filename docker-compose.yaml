@@ -1,11 +1,63 @@
 services:
-  app:
+  clock-1:
     build: ./api
     ports:
       - "3000:3000"
+    environment:
+      - id_clock=1
+      - clock_1="http://192.168.0.10:3000"
+      - clock_2="http://192.168.0.11:3000"
+      - clock_3="http://192.168.0.12:3000"
+      - clock_4="http://192.168.0.13:3000"
     networks:
-      - back
+      clocks_network:
+        ipv4_address: 192.168.0.10
+
+  clock-2:
+    build: ./api
+    ports:
+      - "3000:3000"
+    environment:
+      - id_clock=2
+      - clock_1="http://192.168.0.10:3000"
+      - clock_2="http://192.168.0.11:3000"
+      - clock_3="http://192.168.0.12:3000"
+      - clock_4="http://192.168.0.13:3000"
+    networks:
+      clocks_network:
+        ipv4_address: 192.168.0.11
+
+  clock-3:
+    build: ./api
+    ports:
+      - "3000:3000"
+    environment:
+      - id_clock=3
+      - clock_1="http://192.168.0.10:3000"
+      - clock_2="http://192.168.0.11:3000"
+      - clock_3="http://192.168.0.12:3000"
+      - clock_4="http://192.168.0.13:3000"
+    networks:
+      clocks_network:
+        ipv4_address: 192.168.0.12
+
+  clock-4:
+    build: ./api
+    ports:
+      - "3000:3000"
+    environment:
+      - id_clock=4
+      - clock_1="http://192.168.0.10:3000"
+      - clock_2="http://192.168.0.11:3000"
+      - clock_3="http://192.168.0.12:3000"
+      - clock_4="http://192.168.0.13:3000"
+    networks:
+      clocks_network:
+        ipv4_address: 192.168.0.13
 
 networks:
-  back:
+  clocks_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
