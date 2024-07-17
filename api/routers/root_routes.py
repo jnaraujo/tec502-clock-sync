@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from utils import set_drift, set_time
+from utils import *
 router = APIRouter()
 
 @router.get("/", status_code=200)
@@ -11,6 +11,17 @@ def get_root_route():
 def set_drift_clock(drift: float):
     set_drift(drift)
 
+#function to set new time
 @router.patch('/time-set/{time}')
 def set_time_clock(time: float):
     set_time(time)
+
+#rota para apresentação na interface os dados do relogio
+@router.get('/infos-clock')
+def get_time_host():
+    return {'time': get_time(),
+            'is_leader':  get_is_leader(),
+            'id_clock': get_id(),
+            'drif': get_drift()
+            }
+

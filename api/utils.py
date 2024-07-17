@@ -18,8 +18,9 @@ global time
     inicialização das variaveis
 '''
 is_leader = False
-drift = 0.0
+drift = 0.1
 time = 0
+id_clock = 1
 
 
 #lock para impedir que o valor seja alterado em 2 threads diferentes ao mesmo tempo
@@ -42,6 +43,27 @@ def set_time(new_time):
         #indica que o tempo esta inferior ao dele, ele tem que verificar o novo lider
         return 0
     
+
+def set_leader(leader):
+    global is_leader
+    is_leader = leader
+    
+
+def get_time():
+    global time
+    return time
+
+def get_is_leader():
+    global is_leader
+    return is_leader
+
+def get_id():
+    return id_clock
+
+def get_drift():
+    global drift
+    return drift
+
 
 def leader_send_time():
     global is_leader
