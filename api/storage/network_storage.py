@@ -1,7 +1,17 @@
 clocks = {
   "addrs": [],
   "leader": -1,
+  "self_id": -1
 }
+
+def get_id_from_addr(addr: str) -> int:
+  return clocks["addrs"].index(addr)
+
+def get_self_id():
+  return clocks["self_id"]
+
+def is_self_leader():
+  return get_self_id() == get_leader()
 
 def get_addrs() -> list:
   return clocks["addrs"]
