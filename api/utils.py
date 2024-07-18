@@ -1,5 +1,9 @@
+import os
 import threading
 from time import sleep
+import requests
+
+
 '''
     def global variates
 '''
@@ -20,9 +24,28 @@ global time
 is_leader = False
 drift = 0.1
 time = 0
-id_clock = 1
+id_clock = 0
 
 
+'''
+    lista dos hosts com seus IDs
+        dicionario no formato: 
+            {id: endereço:porta}
+'''
+
+dict_hosts = {
+    1: "http://localhost:8080",
+    2: "http://localhost:8081",
+    3: "http://localhost:8082",
+    4: "http://localhost:8083"
+}
+
+dict_hosts[1] = os.getenv('clock_1')
+dict_hosts[2] = os.getenv('clock_2')
+dict_hosts[3] = os.getenv('clock_3')
+dict_hosts[4] = os.getenv('clock_4')
+id_clock = int(os.getenv('id_clock'))
+print(dict_hosts)
 #lock para impedir que o valor seja alterado em 2 threads diferentes ao mesmo tempo
 time_lock = threading.Lock()
 
@@ -62,6 +85,7 @@ def get_id():
 
 def get_drift():
     global drift
+    
     return drift
 
 
@@ -69,7 +93,24 @@ def leader_send_time():
     global is_leader
     while True:
         if(is_leader):
-            pass
+            #enviar uma requisição de sincronização para todos a cada 5 segundos
+            sleep(5)
+            for host in dict_hosts:
+                url = f"{dict_hosts[host]}/time-set/{get_time()}"
+                try:
+                    info_returned = requests.patch(url=url)
+                    if(info_returned.status_code == 200):
+                        #se entrou aqui é o outro host aceitou isso e isso confirma que ele ainda é o leader
+                        is_leader = True
+                        pass
+                    else:
+                        is_leader = False
+                        break
+                except:
+                    print(f"host: {host} saiu da rede")
+                    pass
+
+
 
 
 def update_time():
@@ -84,11 +125,15 @@ def update_time():
 
 
 
-def start_threads():
+def start_system():
+    global is_leader
     timer_update = threading.Thread(target=update_time, daemon=True)
     timer_update.start()
     leader_send = threading.Thread(target=update_time, daemon=True)
     leader_send.start()
+    if(id_clock == 1):
+        sleep(2)
+        is_leader = True
 
 
-start_threads()
+start_system()
