@@ -13,6 +13,9 @@ def get_self_id():
 def is_self_leader():
   return get_self_id() == get_leader()
 
+def find_addr_by_id(id: int) -> str:
+  return clocks["addrs"][id]
+
 def get_addrs() -> list:
   return clocks["addrs"]
 

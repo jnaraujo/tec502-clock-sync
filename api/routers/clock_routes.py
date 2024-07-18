@@ -20,6 +20,11 @@ def set_local_time(new_time: int, id_leader: int):
   clock.set_time(new_time)
   return {"time": clock.get_time()}
 
+@router.post("/internal/time/{new_time}", status_code=200)
+def set_internal_time(new_time: int):
+  clock.set_time(new_time)
+  return {"time": clock.get_time()}
+
 @router.get("/clock", status_code=200)
 def get_clock():
   return {

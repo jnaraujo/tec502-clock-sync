@@ -20,6 +20,10 @@ services:
     build: ./api
     environment:
       - id_clock=1
+      - clock_1=http://192.168.0.10:5310
+      - clock_2=http://192.168.0.11:5310
+      - clock_3=http://192.168.0.12:5310
+      - clock_4=http://192.168.0.13:5310
     networks:
       clocks_network:
         ipv4_address: 192.168.0.11
@@ -31,6 +35,10 @@ services:
     build: ./api
     environment:
       - id_clock=2
+      - clock_1=http://192.168.0.10:5310
+      - clock_2=http://192.168.0.11:5310
+      - clock_3=http://192.168.0.12:5310
+      - clock_4=http://192.168.0.13:5310
     networks:
       clocks_network:
         ipv4_address: 192.168.0.12
@@ -41,6 +49,10 @@ services:
       - "5313:5310"
     environment:
       - id_clock=3
+      - clock_1=http://192.168.0.10:5310
+      - clock_2=http://192.168.0.11:5310
+      - clock_3=http://192.168.0.12:5310
+      - clock_4=http://192.168.0.13:5310
     networks:
       clocks_network:
         ipv4_address: 192.168.0.13
