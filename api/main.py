@@ -16,12 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(root_routes.router)
-
 # Define as rotas
 app.include_router(root_routes.router)
 app.include_router(clock_routes.router)
 
 # Inicia o relógio
-clock.set_shift(0.9)
+clock.set_drift(0.9)
 Thread(target=clock.increment_time_background).start()

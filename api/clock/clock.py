@@ -2,7 +2,7 @@ import time
 
 clock = {
   "time": 0,
-  "shift": 1
+  "drift": 1
 }
 
 def get_time() -> int:
@@ -14,13 +14,13 @@ def set_time(new_time: int):
 def increment_time():
   clock["time"] += 1
   
-def get_shift() -> int:
-  return clock["shift"]
+def get_drift() -> int:
+  return clock["drift"]
 
-def set_shift(new_shift: int):
-  clock["shift"] = new_shift
+def set_drift(new_drift: int):
+  clock["drift"] = new_drift
     
 def increment_time_background():
   while True:
     increment_time()
-    time.sleep(get_shift())
+    time.sleep(get_drift())

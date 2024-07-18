@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from clock import clock
-from storage import clock_storage
+from storage import network_storage
 
 router = APIRouter()
-
 
 @router.get("/time", status_code=200)
 def get_local_time():
@@ -20,12 +19,20 @@ def set_local_time(new_time: int):
   clock.set_time(new_time)
   return {"time": clock.get_time()}
 
+@router.get("/clock", status_code=200)
+def get_clock():
+    return {
+      'time': clock.get_time(),
+      'is_leader':  network_storage.get_leader(),
+      'id_clock': get_id(),
+      'drift': clock.get_drift()
+    }
 
-@router.get("/shift", status_code=200)
-def get_shift():
-  return {"shift": clock.get_shift()}
+@router.get("/drift", status_code=200)
+def get_drift():
+  return {"drift": clock.get_drift()}
 
 @router.get("/leader", status_code=200)
 def get_leader():
-  addr = clock_storage.get_leader_addr()
+  addr = network_storage.get_leader_addr()
   return {"leader": addr}
