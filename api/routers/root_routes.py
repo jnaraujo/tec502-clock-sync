@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from utils import *
 router = APIRouter()
 
@@ -14,9 +14,10 @@ def set_drift_clock(drift: float):
 
 
 #function to set new time
-@router.patch('/time-set/{time}')
+@router.patch('/time-set/{time}', status_code=200)
 def set_time_clock(time: float):
-    set_time(time)
+    if(not set_time(time)):
+       raise HTTPException(403, )
 
 
 #rota para apresentação na interface os dados do relogio
