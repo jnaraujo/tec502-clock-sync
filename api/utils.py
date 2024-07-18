@@ -22,7 +22,7 @@ global time
     inicialização das variaveis
 '''
 is_leader = False
-drift = 0.1
+drift = 10
 time = 0
 id_clock = 0
 
@@ -34,7 +34,7 @@ id_clock = 0
 '''
 
 dict_hosts = {
-    1: "http://localhost:8080",
+    1: "http://localhost:5310",
     2: "http://localhost:8081",
     3: "http://localhost:8082",
     4: "http://localhost:8083"
@@ -45,7 +45,12 @@ dict_hosts[2] = os.getenv('clock_2')
 dict_hosts[3] = os.getenv('clock_3')
 dict_hosts[4] = os.getenv('clock_4')
 id_clock = int(os.getenv('id_clock'))
-print(dict_hosts)
+
+def print_things():
+    print(dict_hosts)
+    print(id_clock)
+
+
 #lock para impedir que o valor seja alterado em 2 threads diferentes ao mesmo tempo
 time_lock = threading.Lock()
 
@@ -92,18 +97,22 @@ def get_drift():
 def leader_send_time():
     global is_leader
     while True:
+        print('AAAAAAAA')
         if(is_leader):
+            print('BBBBBB')
             #enviar uma requisição de sincronização para todos a cada 5 segundos
             sleep(5)
             for host in dict_hosts:
+                print('CCCC')
                 url = f"{dict_hosts[host]}/time-set/{get_time()}"
+                print(f'TO MANDANDO VIU: {url}')
                 try:
                     info_returned = requests.patch(url=url)
                     if(info_returned.status_code == 200):
                         #se entrou aqui é o outro host aceitou isso e isso confirma que ele ainda é o leader
                         is_leader = True
                         pass
-                    else:
+                    elif(info_returned.status_code == 403):
                         is_leader = False
                         break
                 except:
@@ -122,11 +131,13 @@ def update_time():
         time += 1
         time_lock.release()
         print(f"Meu drift é: {drift}, e o meu tempo é: {time}")
+        
 
 
 
 def start_system():
     global is_leader
+    print('IS LEADEEEEEEEEER')
     timer_update = threading.Thread(target=update_time, daemon=True)
     timer_update.start()
     leader_send = threading.Thread(target=update_time, daemon=True)
@@ -134,6 +145,7 @@ def start_system():
     if(id_clock == 1):
         sleep(2)
         is_leader = True
+        print_things()
+        print(is_leader)
 
 
-start_system()
