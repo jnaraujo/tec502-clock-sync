@@ -15,10 +15,10 @@ def set_local_time(new_time: int, id_leader: int):
   if new_time < clock.get_time():
     network_storage.set_leader(network_storage.get_self_id())
     raise HTTPException(status_code=403, detail="New time is less than current time")
-  
-  network_storage.set_leader(id_leader)
-  clock.set_time(new_time)
-  return {"time": clock.get_time()}
+  elif(new_time > clock.get_time()):
+    network_storage.set_leader(id_leader)
+    clock.set_time(new_time)
+    return {"time": clock.get_time()}
 
 @router.post("/internal/time/{new_time}", status_code=200)
 def set_internal_time(new_time: int):
@@ -51,3 +51,12 @@ def get_leader():
     "leader": network_storage.get_leader_addr(), 
     "id_leader": network_storage.get_leader()
   }
+
+@router.post('/leader-sync-make', status_code=200)
+def await_leader():
+  clock.set_is_sync(True)
+
+
+@router.post('/leader-sync-complete', status_code=200)
+def return_increment():
+  clock.set_is_sync(False)
