@@ -34,5 +34,6 @@ app.include_router(clock_routes.router)
 
 # Inicia o relógio
 clock.set_drift(0.9)
-threading.Thread(target=clock.increment_time_background).start()
-threading.Thread(target=clock.send_time).start()
+threading.Thread(target=clock.increment_time_background, daemon=True).start()
+threading.Thread(target=clock.send_time, daemon=True).start()
+threading.Thread(target=clock.time_out_leader_msg, daemon=True).start()

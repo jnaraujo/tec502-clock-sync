@@ -18,6 +18,8 @@ def set_local_time(new_time: int, id_leader: int):
   elif(new_time > clock.get_time()):
     network_storage.set_leader(id_leader)
     clock.set_time(new_time)
+    clock.set_counter_timeout(0)
+    clock.set_received_time_by_leader(True)
     return {"time": clock.get_time()}
 
 @router.post("/internal/time/{new_time}", status_code=200)
@@ -60,3 +62,24 @@ def await_leader():
 @router.post('/leader-sync-complete', status_code=200)
 def return_increment():
   clock.set_is_sync(False)
+
+
+@router.get('/time-sync', status_code=200)
+def get_time_sync_leader():
+  return {
+    'time-sync': clock.get_time_to_sync(),
+    'is_leader': network_storage.is_self_leader()
+    }
+
+
+@router.post('/time-sync/{new_time_sync}', status_code=200)
+def set_new_time_to_sync(new_time_sync):
+  if(not network_storage.is_self_leader()):
+    raise HTTPException(status_code=406, detail="Clock not leader, update time-sync not possible")
+  if(new_time_sync >5):
+    raise HTTPException(status_code=406, detail="Time to sync is too long")
+  clock.set_time_to_sync(new_time_sync)
+  
+@router.get('/time-out', status_code=200)
+def get_timeout_counter():
+  return {'time_now': clock.get_counter_timeout()}

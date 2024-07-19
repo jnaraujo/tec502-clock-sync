@@ -4,10 +4,12 @@ clocks = {
   "self_id": -1
 }
 
+
+
 def get_id_from_addr(addr: str) -> int:
   return clocks["addrs"].index(addr)
 
-def get_self_id():
+def get_self_id() -> int:
   return clocks["self_id"]
 
 def is_self_leader():
