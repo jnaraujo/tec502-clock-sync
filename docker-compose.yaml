@@ -1,65 +1,75 @@
 services:
   clock-1: &clock
-    build: ./api
+    build:
+      context: ./api
+      args:
+        - port=5310
+    hostname: clock-1
     ports:
       - "5310:5310"
     environment:
       - id_clock=0
-      - clock_1=http://192.168.0.10:5310
-      - clock_2=http://192.168.0.11:5310
-      - clock_3=http://192.168.0.12:5310
-      - clock_4=http://192.168.0.13:5310
+      - clock_1=http://clock-1:5310
+      - clock_2=http://clock-2:5311
+      - clock_3=http://clock-3:5312
+      - clock_4=http://clock-4:5313
     networks:
-      clocks_network:
-        ipv4_address: 192.168.0.10
+      - clocks_network
 
   clock-2:
     <<: *clock
+    hostname: clock-2
     ports:
-      - "5311:5310"
-    build: ./api
+      - "5311:5311"
+    build:
+      context: ./api
+      args:
+        - port=5311
     environment:
       - id_clock=1
-      - clock_1=http://192.168.0.10:5310
-      - clock_2=http://192.168.0.11:5310
-      - clock_3=http://192.168.0.12:5310
-      - clock_4=http://192.168.0.13:5310
+      - clock_1=http://clock-1:5310
+      - clock_2=http://clock-2:5311
+      - clock_3=http://clock-3:5312
+      - clock_4=http://clock-4:5313
     networks:
-      clocks_network:
-        ipv4_address: 192.168.0.11
+      - clocks_network
 
   clock-3:
     <<: *clock
+    hostname: clock-3
     ports:
-      - "5312:5310"
-    build: ./api
+      - "5312:5312"
+    build:
+      context: ./api
+      args:
+        - port=5312
     environment:
       - id_clock=2
-      - clock_1=http://192.168.0.10:5310
-      - clock_2=http://192.168.0.11:5310
-      - clock_3=http://192.168.0.12:5310
-      - clock_4=http://192.168.0.13:5310
+      - clock_1=http://clock-1:5310
+      - clock_2=http://clock-2:5311
+      - clock_3=http://clock-3:5312
+      - clock_4=http://clock-4:5313
     networks:
-      clocks_network:
-        ipv4_address: 192.168.0.12
+      - clocks_network
 
   clock-4:
     <<: *clock
+    hostname: clock-4
+    build:
+      context: ./api
+      args:
+        - port=5313
     ports:
-      - "5313:5310"
+      - "5313:5313"
     environment:
       - id_clock=3
-      - clock_1=http://192.168.0.10:5310
-      - clock_2=http://192.168.0.11:5310
-      - clock_3=http://192.168.0.12:5310
-      - clock_4=http://192.168.0.13:5310
+      - clock_1=http://clock-1:5310
+      - clock_2=http://clock-2:5311
+      - clock_3=http://clock-3:5312
+      - clock_4=http://clock-4:5313
     networks:
-      clocks_network:
-        ipv4_address: 192.168.0.13
+      - clocks_network
 
 networks:
   clocks_network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.0.0/24

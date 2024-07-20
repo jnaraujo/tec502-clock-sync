@@ -16,4 +16,7 @@ COPY . /app
 
 WORKDIR /app
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5310"]
+ARG port
+ENV port=${port}
+
+CMD uvicorn main:app --host 0.0.0.0 --port $port
