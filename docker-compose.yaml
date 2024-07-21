@@ -1,4 +1,13 @@
 services:
+  web:
+    build:
+      context: ./web
+      args:
+        - VITE_BANKS=http://localhost:5310,http://localhost:5311,http://localhost:5312,http://localhost:5313
+    ports:
+      - "3000:3000"
+    networks:
+      - clocks_network
   clock-1: &clock
     build:
       context: ./api

@@ -1,0 +1,105 @@
+import { useUpdateClockDrift, useUpdateClockTime } from "@/hooks/use-clock"
+import { cn } from "@/lib/utils"
+import { Label } from "@radix-ui/react-label"
+import { useState } from "react"
+import toast from "react-hot-toast"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
+
+interface Props {
+  is_online: boolean
+  time?: number
+  is_leader?: boolean
+  self_id?: number
+  leader_id?: number
+  drift?: number
+}
+
+export function Clock(props: { clock: Props }) {
+  const { mutate: updateClockDrift } = useUpdateClockDrift()
+  const { mutate: updateClockTime } = useUpdateClockTime()
+  const [drift, setDrift] = useState(props.clock.drift || 0)
+  const [time, setTime] = useState(props.clock.time || 0)
+
+  function updateTime() {
+    if (props.clock.self_id === undefined) return
+    updateClockTime(
+      {
+        clockID: props.clock.self_id,
+        time,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Tempo alterado!")
+        },
+        onError: ({ message }) => {
+          toast.error(message)
+        },
+      },
+    )
+  }
+
+  function updateDrift() {
+    if (props.clock.self_id === undefined) return
+    updateClockDrift(
+      {
+        clockID: props.clock.self_id,
+        drift,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Drift alterado!")
+        },
+        onError: ({ message }) => {
+          toast.error(message)
+        },
+      },
+    )
+  }
+
+  return (
+    <div>
+      <h2
+        className={cn("font-medium", {
+          "text-green-600": props.clock.is_leader,
+        })}
+      >
+        ID: {props.clock.self_id} -{" "}
+        {props.clock.is_online ? "online" : "offline"}
+      </h2>
+      <div className="grid grid-cols-[160px_1fr]">
+        <ul>
+          <li>Tempo: {props.clock.time}</li>
+          <li>Drift: {props.clock.drift}</li>
+          <li>Leader ID: {props.clock.leader_id}</li>
+        </ul>
+        <div className="space-y-2">
+          <div className="grid grid-cols-3 items-center gap-1">
+            <Label htmlFor="drift">Drift:</Label>
+            <Input
+              id="drift"
+              type="number"
+              value={drift}
+              onChange={(e) => setDrift(Number(e.currentTarget.value))}
+              min={0.1}
+              step={0.1}
+            />
+            <Button onClick={updateDrift}>Salvar</Button>
+          </div>
+
+          <div className="grid grid-cols-3 items-center gap-1">
+            <Label htmlFor="time">Time:</Label>
+            <Input
+              id="time"
+              type="number"
+              value={time}
+              onChange={(e) => setTime(Number(e.currentTarget.value))}
+              min={1}
+            />
+            <Button onClick={updateTime}>Salvar</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
