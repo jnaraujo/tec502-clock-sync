@@ -46,4 +46,7 @@ def get_drift():
 
 @router.post("/drift/{new_drift}", status_code=200)
 def set_drift(new_drift: float):
+  if new_drift <= 0:
+    raise HTTPException(status_code=403, detail="Drift must be greater than 0")
+  
   clock.set_drift(new_drift)
