@@ -92,8 +92,8 @@ export function Clock(props: { clock: Props }) {
         ID: {props.clock.self_id} -{" "}
         {props.clock.is_online ? "online" : "offline"}
       </h2>
-      <div className="grid grid-cols-[160px_1fr]">
-        <ul>
+      <div className="grid grid-cols-[160px_1fr] items-center">
+        <ul className="space-y-1">
           <li>Tempo: {props.clock.time}</li>
           <li>Drift: {props.clock.drift}</li>
           <li>Leader ID: {props.clock.leader_id}</li>
