@@ -5,7 +5,6 @@ clocks = {
 }
 
 
-
 def get_id_from_addr(addr: str) -> int:
   return clocks["addrs"].index(addr)
 

@@ -4,10 +4,6 @@ from storage import network_storage
 
 router = APIRouter()
 
-@router.get("/time", status_code=200)
-def get_local_time():
-  return {"time": clock.get_time()}
-
 @router.post("/time/{new_time}/{id_leader}", status_code=200)
 def set_local_time(new_time: int, id_leader: int):
   # se o tempo enviado pelo cliente for menor que o tempo atual

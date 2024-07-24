@@ -18,25 +18,6 @@ def set_update_time():
   clock["update_time"] = time.time()
   clock_lock.release()
 
-def get_counter_timeout():
-  global counter_timeout
-  counter_lock.acquire()
-  counter = counter_timeout
-  counter_lock.release()
-  return counter
-
-def set_counter_timeout(counter):
-  global counter_timeout
-  counter_lock.acquire()
-  counter_timeout = counter
-  counter_lock.release()
-
-def increment_counter():
-  global counter_timeout
-  counter_lock.acquire()
-  counter_timeout += 1
-  counter_lock.release()
-
 def get_time() -> int:
   clock_lock.acquire()
   time = clock["time"]
@@ -76,7 +57,7 @@ def send_time():
     if (time_since_last_update > max_time_since_last_update):
       # o relógio atual é o líder
       network_storage.set_leader(network_storage.get_self_id())
-      print(f"Tempo máximo de sincronização atingido. Já se passaram {time_since_last_update} segundos desde a última atualização do relógio.\nTempo máximo de espera: {max_time_since_last_update}")
+      print(f"ID clock que realizou a detecção: {network_storage.get_self_id()}.\n Tempo máximo de sincronização atingido. Já se passaram {time_since_last_update} segundos desde a última atualização do relógio.\nTempo máximo de espera: {max_time_since_last_update}")
       
     if network_storage.is_self_leader():
       print('Enviando os tempos')
