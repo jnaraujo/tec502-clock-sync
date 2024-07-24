@@ -85,8 +85,8 @@ export function Clock(props: { clock: Props }) {
   return (
     <div>
       <h2
-        className={cn("font-medium", {
-          "text-green-600": props.clock.is_leader,
+        className={cn("font-medium text-zinc-900", {
+          "text-pink-700": props.clock.is_leader,
         })}
       >
         ID: {props.clock.self_id} -{" "}
