@@ -8,6 +8,7 @@ export interface ClockData {
   self_id?: number
   leader_id?: number
   drift?: number
+  time_sync?: number
 }
 
 export function useClocksData() {
@@ -79,6 +80,30 @@ export function useUpdateClockDrift() {
       )
       if (!resp.ok) {
         throw new Error("Erro ao alterar o drift do relógio.")
+      }
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["clockData"],
+      })
+    },
+  })
+}
+
+export function useUpdateClockTimeSync() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: { clockID: number; time_sync: number }) => {
+      const resp = await fetch(
+        `${env.VITE_BANKS.at(data.clockID)}/time-sync/${data.time_sync}`,
+        {
+          method: "POST",
+        },
+      )
+      if (!resp.ok) {
+        throw new Error("Erro ao alterar o tempo de sincronização do relógio.")
       }
       return data
     },
