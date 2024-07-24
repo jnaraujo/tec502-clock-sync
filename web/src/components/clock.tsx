@@ -131,7 +131,7 @@ export function Clock(props: { clock: Props }) {
               type="number"
               value={time_sync}
               onChange={(e) => setTimeSync(Number(e.currentTarget.value))}
-              min={1}
+              min={3}
               max={10}
             />
             <Button onClick={updateTimeSync}>Salvar</Button>
