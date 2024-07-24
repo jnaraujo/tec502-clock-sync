@@ -5,8 +5,8 @@ export function HomePage() {
   const { data: clocks } = useClocksData()
 
   return (
-    <main className="flex min-h-[100svh] flex-col items-center justify-center overflow-auto bg-pink-300 font-sans">
-      <article className="max-w-screen-lg space-y-2 rounded-lg bg-background p-6">
+    <main className="flex min-h-[100svh] flex-col items-center justify-center overflow-auto bg-pink-200 font-sans">
+      <article className="min-h-96 w-full max-w-screen-lg space-y-2 rounded-lg bg-background p-6">
         <h1 className="text-xl font-semibold text-zinc-900">Relógios:</h1>
         <div className="grid grid-cols-2 grid-rows-2 gap-x-14 gap-y-6">
           {clocks?.map((clock) => {
