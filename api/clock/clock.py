@@ -81,9 +81,9 @@ def send_time():
         print(f"Enviando tempo para {url}")
         try:
           info_returned = requests.post(url=url)
-          # se o relógio do host for menor que o relógio atual, ele se torna o novo líder
+          # se o relógio do host for maior que o relógio atual, ele se torna o novo líder
           if(info_returned.status_code == 403):
-            print(f"O relógio do host {addr} é menor que o relógio atual. Ele se tornará o novo líder.")
+            print(f"O relógio do host {addr} é maior que o relógio atual. Ele se tornará o novo líder.")
             network_storage.set_leader(network_storage.get_id_from_addr(addr))
             break
           
