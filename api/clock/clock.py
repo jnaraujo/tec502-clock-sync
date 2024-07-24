@@ -3,6 +3,7 @@ import threading
 import requests
 from storage import network_storage
 
+global time_to_sync
 time_to_sync = 5 # tempo entre as sincronizações
 
 clock_lock = threading.Lock()
@@ -12,8 +13,15 @@ clock = {
   "update_time": time.time() # tempo da última atualização
 }
 
+def get_time_sync():
+  return time_to_sync
+
+def set_time_sync(new_time):
+  global time_to_sync
+  time_to_sync = new_time
+
 def get_max_time_since_last_update():
-  return 10 + (network_storage.get_self_id()*2) # tempo máximo desde a última atualização do relógio
+  return get_time_sync()*2 + get_time_sync() + (network_storage.get_self_id()*2) # tempo máximo desde a última atualização do relógio
 
 def set_update_time():
   clock_lock.acquire()
@@ -69,7 +77,7 @@ def send_time():
         if addr == network_storage.find_addr_by_id(network_storage.get_self_id()):
           continue
         
-        url = f"{addr}/time/{get_time()}/{network_storage.get_self_id()}"
+        url = f"{addr}/time/{get_time()}/{network_storage.get_self_id()}/{get_time_sync()}"
         print(f"Enviando tempo para {url}")
         try:
           info_returned = requests.post(url=url)
@@ -84,4 +92,4 @@ def send_time():
         except Exception as e:
           print(e)
           pass
-      time.sleep(time_to_sync)
+      time.sleep(get_time_sync())

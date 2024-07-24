@@ -1,4 +1,4 @@
-import { useUpdateClockDrift, useUpdateClockTime } from "@/hooks/use-clock"
+import { useUpdateClockDrift, useUpdateClockTime, useUpdateClockTimeSync } from "@/hooks/use-clock"
 import { cn } from "@/lib/utils"
 import { Label } from "@radix-ui/react-label"
 import { useState } from "react"
@@ -13,13 +13,16 @@ interface Props {
   self_id?: number
   leader_id?: number
   drift?: number
+  time_sync?: number
 }
 
 export function Clock(props: { clock: Props }) {
   const { mutate: updateClockDrift } = useUpdateClockDrift()
   const { mutate: updateClockTime } = useUpdateClockTime()
+  const { mutate: updateClockTimeSync } = useUpdateClockTimeSync()
   const [drift, setDrift] = useState(props.clock.drift || 0)
   const [time, setTime] = useState(props.clock.time || 0)
+  const [time_sync, setTimeSync] = useState(props.clock.time_sync || 0)
 
   function updateTime() {
     if (props.clock.self_id === undefined) return
@@ -57,6 +60,24 @@ export function Clock(props: { clock: Props }) {
     )
   }
 
+  function updateTimeSync() {
+    if (props.clock.self_id === undefined) return
+    updateClockTimeSync(
+      {
+        clockID: props.clock.self_id,
+        time_sync,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Tempo alterado!")
+        },
+        onError: ({ message }) => {
+          toast.error(message)
+        },
+      },
+    )
+  }
+
   return (
     <div>
       <h2
@@ -72,6 +93,7 @@ export function Clock(props: { clock: Props }) {
           <li>Tempo: {props.clock.time}</li>
           <li>Drift: {props.clock.drift}</li>
           <li>Leader ID: {props.clock.leader_id}</li>
+          <li>Time Sync: {props.clock.time_sync}</li>
         </ul>
         <div className="space-y-2">
           <div className="grid grid-cols-3 items-center gap-1">
@@ -97,6 +119,18 @@ export function Clock(props: { clock: Props }) {
               min={1}
             />
             <Button onClick={updateTime}>Salvar</Button>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-1">
+            <Label htmlFor="time">Time:</Label>
+            <Input
+              id="time_sync"
+              type="number"
+              value={time_sync}
+              onChange={(e) => setTimeSync(Number(e.currentTarget.value))}
+              min={1}
+              max={10}
+            />
+            <Button onClick={updateTimeSync}>Salvar</Button>
           </div>
         </div>
       </div>
