@@ -110,7 +110,9 @@ export function Clock(props: { clock: Props }) {
               min={0.1}
               step={0.1}
             />
-            <Button onClick={updateDrift}>Salvar</Button>
+            <Button onClick={updateDrift} variant="pink">
+              Salvar
+            </Button>
           </div>
 
           <div className="grid grid-cols-3 items-center gap-1">
@@ -122,7 +124,9 @@ export function Clock(props: { clock: Props }) {
               onChange={(e) => setTime(Number(e.currentTarget.value))}
               min={1}
             />
-            <Button onClick={updateTime}>Salvar</Button>
+            <Button onClick={updateTime} variant="pink">
+              Salvar
+            </Button>
           </div>
           <div className="grid grid-cols-3 items-center gap-1">
             <Label htmlFor="time_sync">Sync:</Label>
@@ -134,7 +138,9 @@ export function Clock(props: { clock: Props }) {
               min={3}
               max={10}
             />
-            <Button onClick={updateTimeSync}>Salvar</Button>
+            <Button onClick={updateTimeSync} variant="pink">
+              Salvar
+            </Button>
           </div>
         </div>
       </div>
