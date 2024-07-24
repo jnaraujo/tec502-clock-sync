@@ -86,9 +86,8 @@ def send_time():
         if addr == network_storage.find_addr_by_id(network_storage.get_self_id()):
           continue
         
-        print(f"Addr: {addr} - {network_storage.find_addr_by_id(network_storage.get_self_id())}")
-        
         url = f"{addr}/time/{get_time()}/{network_storage.get_self_id()}"
+        print(f"Enviando tempo para {url}")
         try:
           info_returned = requests.post(url=url)
           # se o relógio do host for menor que o relógio atual, ele se torna o novo líder
