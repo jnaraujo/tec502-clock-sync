@@ -24,6 +24,8 @@ def set_local_time(new_time: int, id_leader: int, time_sync: int):
 
 @router.post("/internal/time/{new_time}", status_code=200)
 def set_internal_time(new_time: int):
+  if(new_time < clock.get_time()):
+    raise HTTPException(status_code=403, detail="New time is less than current time")
   clock.set_time(new_time)
   return {"time": clock.get_time()}
 
