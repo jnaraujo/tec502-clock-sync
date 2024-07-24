@@ -5,6 +5,7 @@ import threading
 from clock import clock
 import os
 from storage import network_storage
+import random
 
 network_storage.add_addr(os.getenv('clock_1'))
 network_storage.add_addr(os.getenv('clock_2'))
@@ -33,7 +34,6 @@ app.include_router(root_routes.router)
 app.include_router(clock_routes.router)
 
 # Inicia o relógio
-clock.set_drift(0.9)
+clock.set_drift(random.uniform(0.7, 1.3))
 threading.Thread(target=clock.increment_time_background, daemon=True).start()
 threading.Thread(target=clock.send_time, daemon=True).start()
-threading.Thread(target=clock.time_out_leader_msg, daemon=True).start()
