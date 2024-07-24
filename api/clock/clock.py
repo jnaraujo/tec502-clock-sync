@@ -3,7 +3,6 @@ import threading
 import requests
 from storage import network_storage
 
-max_time_since_last_update = 10 + (network_storage.get_self_id()*2) # tempo máximo desde a última atualização do relógio
 time_to_sync = 5 # tempo entre as sincronizações
 
 clock_lock = threading.Lock()
@@ -12,6 +11,9 @@ clock = {
   "drift": 1, # drift do relógio
   "update_time": time.time() # tempo da última atualização
 }
+
+def get_max_time_since_last_update():
+  return 10 + (network_storage.get_self_id()*2) # tempo máximo desde a última atualização do relógio
 
 def set_update_time():
   clock_lock.acquire()
@@ -54,10 +56,10 @@ def send_time():
   while True:
     # verifica se o tempo máximo de sincronização foi atingido
     time_since_last_update = time.time() - clock["update_time"]
-    if (time_since_last_update > max_time_since_last_update):
+    if (time_since_last_update > get_max_time_since_last_update()):
       # o relógio atual é o líder
       network_storage.set_leader(network_storage.get_self_id())
-      print(f"ID clock que realizou a detecção: {network_storage.get_self_id()}.\n Tempo máximo de sincronização atingido. Já se passaram {time_since_last_update} segundos desde a última atualização do relógio.\nTempo máximo de espera: {max_time_since_last_update}")
+      print(f"ID clock que realizou a detecção: {network_storage.get_self_id()}.\n Tempo máximo de sincronização atingido. Já se passaram {time_since_last_update} segundos desde a última atualização do relógio.\nTempo máximo de espera: {get_max_time_since_last_update()}")
       
     if network_storage.is_self_leader():
       print('Enviando os tempos')
