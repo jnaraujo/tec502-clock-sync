@@ -73,7 +73,7 @@ export function Clock(props: { clock: Props }) {
       },
       {
         onSuccess: () => {
-          toast.success("Tempo alterado!")
+          toast.success("Tempo de sincronização alterado!")
         },
         onError: ({ message }) => {
           toast.error(message)
@@ -125,7 +125,7 @@ export function Clock(props: { clock: Props }) {
             <Button onClick={updateTime}>Salvar</Button>
           </div>
           <div className="grid grid-cols-3 items-center gap-1">
-            <Label htmlFor="time">Time:</Label>
+            <Label htmlFor="time_sync">Time Sync:</Label>
             <Input
               id="time_sync"
               type="number"
