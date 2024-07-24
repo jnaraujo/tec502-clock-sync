@@ -49,7 +49,7 @@ def get_drift():
 def set_drift(new_drift: float):
   if new_drift <= 0:
     raise HTTPException(status_code=403, detail="Drift must be greater than 0")
-  clock.set_drift(new_drift)
+  clock.set_drift(round(new_drift,1))
 
 @router.get('/time-sync', status_code=200)
 def get_time_to_sync():
@@ -57,6 +57,6 @@ def get_time_to_sync():
 
 @router.post('/time-sync/{new_time}', status_code=200)
 def set_new_time_to_sync(new_time: int):
-  if(new_time < 1 or new_time > 10):
-    raise HTTPException(status_code=403, detail="Time to sync must be greater than 1 or under 10")
+  if(new_time < 3 or new_time > 10):
+    raise HTTPException(status_code=403, detail="Time to sync must be greater than 3 or under 10")
   clock.set_time_sync(new_time)
