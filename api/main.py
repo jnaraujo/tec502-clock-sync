@@ -34,6 +34,6 @@ app.include_router(root_routes.router)
 app.include_router(clock_routes.router)
 
 # Inicia o relógio
-clock.set_drift(random.uniform(0.7, 1.3))
+clock.set_drift(round(random.uniform(0.7, 1.3), 1))
 threading.Thread(target=clock.increment_time_background, daemon=True).start()
 threading.Thread(target=clock.send_time, daemon=True).start()
