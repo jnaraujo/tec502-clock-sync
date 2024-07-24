@@ -1,4 +1,8 @@
-import { useUpdateClockDrift, useUpdateClockTime, useUpdateClockTimeSync } from "@/hooks/use-clock"
+import {
+  useUpdateClockDrift,
+  useUpdateClockTime,
+  useUpdateClockTimeSync,
+} from "@/hooks/use-clock"
 import { cn } from "@/lib/utils"
 import { Label } from "@radix-ui/react-label"
 import { useState } from "react"
